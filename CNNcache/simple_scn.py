@@ -5,8 +5,8 @@ import copy
 from random import randint
 
 #input characteristics
-message_len = 16
-clusters = 4 #must be at least 2 
+message_len = 32*8
+clusters = 128 #must be at least 2 
 input_distribution_type = 1 #uniformly distributed
 #input_distribution_type = 2 #non-uniform; concentrated on certain areas
 input_distribution = ""
@@ -86,8 +86,8 @@ while block_i < storage_blocks:
 
 #input random data
 input_file = open("full_input.txt", "w")
-range_input = math.pow(2,10)-1
-total_input_size = math.pow(2,12)
+range_input = math.pow(2,8)-1
+total_input_size = math.pow(2,10)
 input_i = 0
 input_set = []
 unifrom_dist = np.random.uniform(low=0, high=range_input, size=total_input_size)
@@ -355,14 +355,15 @@ for entry in partial_input_set:
     print ("--------------")
     total_iterations = total_iterations + iteration_count
 
-print ("input size        :",input_i)
-print ("input distribution:", input_distribution)
-print ("total # iterations:",total_iterations," (iterations to process all",input_i,"input)")
-print ("avgerage iteration:",round(total_iterations/input_i, 3), "iternations/input")
+print ("input message length :",message_len)
+print ("total # input        :",input_i)
+print ("input distribution   :", input_distribution)
+print ("total # iterations   :",total_iterations," (iterations to process all",input_i,"input)")
+print ("avgerage iteration   :",round(total_iterations/input_i, 3), "iternations/input")
 print ("---------------")
-print ("total # of matches:",successful_match_count, "(",round((successful_match_count/input_i)*100,3),"%)")
-print ("--avg iter/match  :",round(iterations_success/successful_match_count, 3), "iterations to generate a match"), 
-print ("total # of errors :",errors_count)
+print ("total # of matches   :",successful_match_count, "(",round((successful_match_count/input_i)*100,3),"%)")
+print ("--avg iter/match     :",round(iterations_success/successful_match_count, 3), "iterations to generate a match"), 
+print ("total # of errors    :",errors_count)
 if errors_count>0:
     print ("--avg iter/error  :",round(iterations_error/errors_count, 3), "iterations to declare an error"), 
 
