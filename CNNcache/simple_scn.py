@@ -5,9 +5,9 @@ import copy
 from random import randint
 
 #input characteristics
-message_len = 128*8
+message_len = 64*8
 clusters = 128 #must be at least 2 
-input_distribution_type = 1 #uniformly distributed
+input_distribution_type = 2 #uniformly distributed
 #input_distribution_type = 2 #non-uniform; concentrated on certain areas
 input_distribution = ""
 if input_distribution_type == 1:
