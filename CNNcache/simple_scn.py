@@ -5,7 +5,7 @@ import copy
 from random import randint
 
 #input characteristics
-message_len = 32*8
+message_len = 128*8
 clusters = 128 #must be at least 2 
 input_distribution_type = 1 #uniformly distributed
 #input_distribution_type = 2 #non-uniform; concentrated on certain areas
@@ -355,12 +355,13 @@ for entry in partial_input_set:
     print ("--------------")
     total_iterations = total_iterations + iteration_count
 
-print ("input message length :",message_len)
+print ("input message length :",message_len, "bits")
 print ("total # input        :",input_i)
 print ("input distribution   :", input_distribution)
+print ("# clusters           :",clusters)
+print ("---------------")
 print ("total # iterations   :",total_iterations," (iterations to process all",input_i,"input)")
 print ("avgerage iteration   :",round(total_iterations/input_i, 3), "iternations/input")
-print ("---------------")
 print ("total # of matches   :",successful_match_count, "(",round((successful_match_count/input_i)*100,3),"%)")
 print ("--avg iter/match     :",round(iterations_success/successful_match_count, 3), "iterations to generate a match"), 
 print ("total # of errors    :",errors_count)
