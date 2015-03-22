@@ -87,7 +87,7 @@ while block_i < storage_blocks:
 #input random data
 input_file = open("full_input.txt", "w")
 range_input = math.pow(2,8)-1
-total_input_size = math.pow(2,10)
+total_input_size = math.pow(2,12)
 input_i = 0
 input_set = []
 unifrom_dist = np.random.uniform(low=0, high=range_input, size=total_input_size)
@@ -228,6 +228,7 @@ for entry in partial_input_set:
     active_neurons_cluster_linked = [] #neurons per cluster with links to at least one candidate neuron in all clusters
     cluster_i = 0
     iteration_count = iteration_count + 1
+    print ("iteration",iteration_count,": deactivating candidate neurons")
     for cluster in neuron_candidates:
         active_neurons_cluster_linked.append([])
         for candidate_n in cluster:     
@@ -280,12 +281,12 @@ for entry in partial_input_set:
             match_str = match_str + ("{0:0"+str(bits_per_cluster)+"b}").format(cluster[0]) + " "
         cluster_i = cluster_i + 1
     if unique_match_found:
-        #print ("match found: ",match_str)
-        #print ("...on 1 iteration.")
+        print ("match found: ",match_str)
+        print ("...on 1 iteration.")
         successful_match_count = successful_match_count + 1
         iterations_success = iterations_success + iteration_count
     else:
-        #print ("attempting to eliminate multiple activated neurons...")
+        #print ("attempting to eliminate ambiguities...")
         x = 0 #dummy 
     
     if not unique_match_found:
@@ -295,6 +296,7 @@ for entry in partial_input_set:
             cluster_i = 0
             multiple_active_neurons_count_prev = 0
             iteration_count = iteration_count + 1
+            print ("iteration",iteration_count,": deactivating active neurons")
             for cluster in active_neurons_cluster_linked:
                 multiple_active_neurons_count_prev = multiple_active_neurons_count_prev + len(cluster)
                 active_neurons.append([])
@@ -338,8 +340,8 @@ for entry in partial_input_set:
                 match_str = ""
                 for cluster in active_neurons:
                     match_str = match_str + ("{0:0"+str(bits_per_cluster)+"b}").format(cluster[0]) + " "
-                #print ("match found:",match_str)
-                #print ("...after ",iteration_count,"iterations.")
+                print ("match found:",match_str)
+                print ("...after ",iteration_count,"iterations.")
                 successful_match_count = successful_match_count + 1
                 iterations_success = iterations_success + iteration_count
                 continue_deactiving = False
@@ -347,7 +349,7 @@ for entry in partial_input_set:
                 #print ("continue iteration to eliminate multiple active neurons")
                 continue_deactiving = True
             else:
-                #print ("number of active nuerons hasn't changed.")
+                print ("number of active nuerons hasn't changed.")
                 continue_deactiving = False
                 errors_count = errors_count + 1
                 iterations_error = iterations_error + iteration_count
