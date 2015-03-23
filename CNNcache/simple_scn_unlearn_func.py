@@ -87,7 +87,7 @@ while block_i < storage_blocks:
 #input random data
 input_file = open("full_input.txt", "w")
 range_input = math.pow(2,8)-1
-total_input_size = math.pow(2,12)
+total_input_size = math.pow(2,10)
 input_i = 0
 input_set = []
 unifrom_dist = np.random.uniform(low=0, high=range_input, size=total_input_size)
@@ -179,6 +179,7 @@ successful_match_count = 0
 iterations_success = 0
 iterations_error = 0
 errors_count = 0
+max_iteration = 0
 for entry in partial_input_set:
     iteration_count = 0
     print ("search input",input_i+1,":",entry)
@@ -220,6 +221,11 @@ for entry in partial_input_set:
         sub_m_i = sub_m_i + 1
     #deactivate candidate neurons that do not have a link to at least one candidate neuron in ALL the clusters
     #print ("candidate neurons:")
+    print ("candidate neurons:")
+    cluster_i = 0
+    while cluster_i < clusters:
+        print(neuron_candidates[cluster_i])
+        cluster_i = cluster_i + 1
     candidate_cluster_i = 0
     for candidate_cluster in neuron_candidates:
         #print (" cluster",candidate_cluster_i,":",candidate_cluster)
@@ -228,7 +234,7 @@ for entry in partial_input_set:
     active_neurons_cluster_linked = [] #neurons per cluster with links to at least one candidate neuron in all clusters
     cluster_i = 0
     iteration_count = iteration_count + 1
-    print ("iteration",iteration_count,": deactivating candidate neurons")
+    print ("iteration",iteration_count,": activating candidate neurons")
     for cluster in neuron_candidates:
         active_neurons_cluster_linked.append([])
         for candidate_n in cluster:     
@@ -256,7 +262,11 @@ for entry in partial_input_set:
                     candidate_n_str = " "+candidate_n_str
                 #print ("neuron", candidate_n_str, "in cluster",cluster_i,"has links to all other clusters.")
         cluster_i = cluster_i + 1
-
+    print ("active neurons:")
+    cluster_i = 0
+    while cluster_i < clusters:
+        print(active_neurons_cluster_linked[cluster_i])
+        cluster_i = cluster_i + 1
     #generate match
     cluster_i = 0
     match_str = ""
@@ -296,7 +306,7 @@ for entry in partial_input_set:
             cluster_i = 0
             multiple_active_neurons_count_prev = 0
             iteration_count = iteration_count + 1
-            print ("iteration",iteration_count,": deactivating active neurons")
+            print ("iteration",iteration_count,": deactivating incompletely linked active neurons")
             for cluster in active_neurons_cluster_linked:
                 multiple_active_neurons_count_prev = multiple_active_neurons_count_prev + len(cluster)
                 active_neurons.append([])
@@ -326,6 +336,11 @@ for entry in partial_input_set:
                         #print ("neuron", candidate_n_str, "in cluster",cluster_i,"has links to active neurons.")
                 cluster_i = cluster_i + 1
             #print ("active_neurons:")
+            print ("active neurons:")
+            cluster_i = 0
+            while cluster_i < clusters:
+                print(active_neurons[cluster_i])
+                cluster_i = cluster_i + 1
             active_neurons_cluster_i = 0
             multiple_active_neurons_count = 0
             for active_neurons_cluster_elimination in active_neurons:
@@ -356,6 +371,8 @@ for entry in partial_input_set:
     input_i = input_i + 1
     print ("--------------")
     total_iterations = total_iterations + iteration_count
+    if iteration_count > max_iteration:
+        max_iteration = iteration_count
 
 print ("input message length :",message_len, "bits")
 print ("total # input        :",input_i)
@@ -369,8 +386,43 @@ print ("--avg iter/match     :",round(iterations_success/successful_match_count,
 print ("total # of errors    :",errors_count)
 if errors_count>0:
     print ("--avg iter/error     :",round(iterations_error/errors_count, 3), "iterations to declare an error"), 
+print ("max iteration        :",max_iteration)
+#print ("---------------")
+#print ("scores for sub-messages")
+#
+#neuron_activation_scores = []
+#cluster_i = 0
+#while cluster_i < clusters:
+#    neuron_activation_scores.append([])
+#    neuron_i = 0
+#    while neuron_i < neurons_per_cluster:
+#        neuron_activation_scores[cluster_i].append(0)
+#        neuron_i = neuron_i + 1
+#    cluster_i = cluster_i +1
+#
+#sub_message_i = 0
+#while sub_message_i < clusters:
+#    for row in input_set:
+#        neuron_active = int(row[sub_message_i],2)
+#        old_score = neuron_activation_scores[sub_message_i][neuron_active]
+#        neuron_activation_scores[sub_message_i][neuron_active] = old_score + 1
+#    sub_message_i = sub_message_i + 1 
+#
+#cluster_i = 0
+#while cluster_i < clusters:
+#    entry_i = 0
+#    print ("sub-message",cluster_i)
+#    neuron_scores_str = ""
+#    for entry in neuron_activation_scores[cluster_i]:
+#        neuron_scores_str = neuron_scores_str + "neuron"+str(entry_i)+": "+str(entry)+"\t\t"
+#        entry_i = entry_i + 1
+#        if (entry_i%4)==0:
+#            print (neuron_scores_str)
+#            neuron_scores_str = ""
+#    print ("---------------")
+#    cluster_i = cluster_i +1
 
-        
+
 #    search_sub_messages_index = []    
 #    sub_m_i = 0    
 #    for sub_m in entry:
